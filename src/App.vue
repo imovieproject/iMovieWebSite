@@ -1,13 +1,25 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
+    <el-container>
+      <el-header class="bottom-line">
+        <page-header/>
+      </el-header>
+
+      <el-main>
+        <router-view/>
+      </el-main>
+    </el-container>
   </div>
 </template>
 
 <script>
+import PageHeader from './components/PageHeader'
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    'page-header': PageHeader
+  }
 }
 </script>
 
@@ -18,6 +30,11 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+.bottom-line {
+  border-bottom-style: solid;
+  border-bottom-color: rgba(187,187,187,0.5);
+  border-bottom-width: 1px;
 }
 </style>

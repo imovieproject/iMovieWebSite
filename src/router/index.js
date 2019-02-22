@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import MainPage from '@/pages/MainPage'
+import MovieCard from '@/components/MovieCard'
+import MovieGrid from '@/components/MovieGrid'
 
 Vue.use(Router)
 
@@ -8,8 +10,18 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'MainPage',
+      component: MainPage
+    },
+    {
+      path: '/test',
+      name: 'MovieCard',
+      component: MovieCard
+    },
+    {
+      path: '/testGrid',
+      name: 'MovieGrid',
+      component: MovieGrid
     }
   ]
 })
