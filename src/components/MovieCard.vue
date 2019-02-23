@@ -103,7 +103,7 @@ export default {
         // params: {
         //   movieid: this.movieInfo.id
         // }
-        path: `/MovieDetailPage/${this.movieInfo.id}`
+        path: `/EmptyComponent/${this.movieInfo.id}`
       })
     }
   },

@@ -1,7 +1,7 @@
 <template>
     <div class="page-header">
         <!-- 页面logo -->
-        <div class="page-logo">
+        <div class="page-logo" @click="gotoMainPage">
             <p style="color: #67C23A">i</p>
             <p style="color: #409EFF">Movie</p>
         </div>
@@ -23,6 +23,13 @@ export default {
     return {
       searchInput: ' ',
       imageSrc: 'http://s15.sinaimg.cn/middle/62791a5cxa647fde862ae&690'
+    }
+  },
+  methods: {
+    gotoMainPage: function () {
+      this.$router.push({
+        name: 'MainPage'
+      })
     }
   }
 }
