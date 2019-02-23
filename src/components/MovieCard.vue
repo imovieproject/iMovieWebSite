@@ -1,7 +1,7 @@
 <!-- 电影卡片，在首页显示电影详情 -->
 <template>
     <div>
-      <div class="card">
+      <div class="card" @click="gotoMovieDetailPage">
         <!-- 当鼠标悬停在卡片上时，显示电影的详细信息 -->
         <el-popover placement="right" trigger="hover">
           <!-- 电影数字评分 -->
@@ -19,7 +19,7 @@
 
             <!-- 分割线 -->
             <el-row >
-              <el-col class="bottom-line" :span="24" ></el-col>
+              <el-col class="card-bottom-line" :span="24" ></el-col>
             </el-row>
 
             <!-- 电影年份 -->
@@ -69,6 +69,8 @@ export default {
     //     this.halfMovieScore = this.movieInfo.rating.average / 2
     //   }
     //   )
+
+    console.log(this.$route.name)
   },
   methods: {
     getDirectorString: function () {
@@ -92,7 +94,33 @@ export default {
         castStr += this.movieInfo.casts[i].name
         return castStr
       }
+    },
+    gotoMovieDetailPage: function () {
+      console.log('clicked')
+      console.log('movie id = ' + this.movieInfo.id)
+      this.$router.push({
+        // name: 'MovieDetailPage',
+        // params: {
+        //   movieid: this.movieInfo.id
+        // }
+        path: `/MovieDetailPage/${this.movieInfo.id}`
+      })
     }
+  },
+  beforeRouteLeave (to, from, next) {
+    console.log('card update to route ')
+    console.log(to.params)
+    console.log('card update from route ')
+    console.log(from.param)
+    console.log('card before route update')
+    console.log(this.$route)
+    var movieID = to.params.movieid
+    axios
+      .get('/api/movie/subject/' + movieID)
+      .then((response) => {
+        this.movieInfo = response.data
+        console.log(response.data)
+      })
   },
   computed: {
     mapMovieScore: function () {
@@ -117,9 +145,9 @@ export default {
   padding-top: 0px;
 }
 
-.bottom-line {
+.card-bottom-line {
   border-bottom-style: solid;
-  border-bottom-widht: 1;
+  border-bottom-width: 1;
   border-bottom-color: rgba(187,187,187,0.5);
   margin-top: 10px;
 }

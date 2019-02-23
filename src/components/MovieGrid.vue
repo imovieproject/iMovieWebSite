@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="grid-container" v-loading="!isLoaded">
         <el-row type="flex" justify="start">
             <el-col :span="4" v-for="movie in movieList" :key="movie.id" >
                 <movie-card v-if="isLoaded" :movieInfo="movie"></movie-card>
@@ -36,5 +36,9 @@ export default {
 <style>
 .el-row{
     flex-wrap: wrap;
+}
+
+.grid-container{
+  padding: 20px;
 }
 </style>
