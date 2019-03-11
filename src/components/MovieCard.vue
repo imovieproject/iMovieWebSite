@@ -29,19 +29,23 @@
 
             <!-- 电影导演 -->
             <el-row>
-              <el-col :span="24"><p class="movie-detail-info">导演: {{ this.getDirectorString() }}</p></el-col>
+              <el-col :span="24"><p class="movie-detail-info">导演: {{ getDirectorString }}</p></el-col>
             </el-row>
 
             <!-- 电影演员 -->
             <el-row>
-              <el-col :span="24"><p class="movie-detail-info">演员: {{ this.getCastString() }}</p></el-col>
+              <el-col :span="24"><p class="movie-detail-info">演员: {{ getCastString }}</p></el-col>
             </el-row>
 
             <!-- 电影卡片显示内容 -->
             <el-card :body-style="{ padding: '0px' }" shadow="hover" slot="reference">
-              <img :src="getImgCache" class="image">
-              <div style="padding: 14px;">
-                <span>{{ movieInfo.title }}</span>
+              <img
+                :src="getImgCache(movieInfo.image)"
+                onerror='this.src="https://images.weserv.nl/?url=http://b-ssl.duitang.com/uploads/item/201801/08/20180108170346_TPWik.thumb.224_0.jpeg"'
+                class="image"
+              >
+              <div style="padding: 10px;">
+                <p class="movie-title">{{ movieInfo.title }}</p>
               </div>
             </el-card>
         </el-popover>
@@ -50,7 +54,7 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 
 export default {
   props: {
@@ -58,62 +62,30 @@ export default {
   },
   data () {
     return {
-      halfMovieScore: 0
+      halfMovieScore: 0,
+      altImgPath: 'https://images.weserv.nl/?url=http://b-ssl.duitang.com/uploads/item/201801/08/20180108170346_TPWik.thumb.224_0.jpeg'
     }
   },
   created () {
-    // console.log('created')
-    // axios.get('/api/movie/subject/26942674')
-    //   .then((response) => {
-    //     this.movieInfo = response.data
-    //     this.halfMovieScore = this.movieInfo.rating.average / 2
-    //   }
-    //   )
-
-    console.log(this.$route.name)
   },
   methods: {
-    getDirectorString: function () {
-      if (this.movieInfo.directors) {
-        var directorList = ''
-        var i = 0
-        for (; i < this.movieInfo.directors.length - 1; i++) {
-          directorList += this.movieInfo.directors[i].name + '/'
-        }
-        directorList = directorList + this.movieInfo.directors[i].name
-        return directorList
-      }
-    },
-    getCastString: function () {
-      if (this.movieInfo.casts) {
-        var castStr = ''
-        var i = 0
-        for (;i < this.movieInfo.casts.length - 1; i++) {
-          castStr += this.movieInfo.casts[i].name + '/'
-        }
-        castStr += this.movieInfo.casts[i].name
-        return castStr
-      }
-    },
+    // 先跳转到一个空组件再跳转到详情页
+    // 如果不这样的话会出现url不改变的情况，产生原因尚不清楚
     gotoMovieDetailPage: function () {
-      console.log('clicked')
-      console.log('movie id = ' + this.movieInfo.id)
       this.$router.push({
-        // name: 'MovieDetailPage',
-        // params: {
-        //   movieid: this.movieInfo.id
-        // }
-        path: `/EmptyComponent/${this.movieInfo.id}`
+        path: `/EmptyComponent/${this.movieInfo.douban_id}`
       })
+    },
+    // 直接从豆瓣获取到的链接是无法显示的
+    // 这个网址是一个图床
+    getImgCache: function (originPath) {
+      var newPath = 'https://images.weserv.nl/?url='
+      // newPath += this.movieInfo.image
+      newPath += originPath
+      return newPath
     }
   },
   beforeRouteLeave (to, from, next) {
-    console.log('card update to route ')
-    console.log(to.params)
-    console.log('card update from route ')
-    console.log(from.param)
-    console.log('card before route update')
-    console.log(this.$route)
     var movieID = to.params.movieid
     axios
       .get('/api/movie/subject/' + movieID)
@@ -126,10 +98,29 @@ export default {
     mapMovieScore: function () {
       return this.movieInfo.rating.average / 2
     },
-    getImgCache: function (originPath) {
-      var newPath = 'https://images.weserv.nl/?url='
-      newPath += this.movieInfo.images.large
-      return newPath
+
+    getDirectorString: function () {
+      if (this.movieInfo.directors) {
+        var directorList = ''
+        var i = 0
+        for (; i < this.movieInfo.directors.length - 1; i++) {
+          directorList += this.movieInfo.directors[i].name + '/'
+        }
+        directorList = directorList + this.movieInfo.directors[i].name
+        return directorList
+      }
+    },
+
+    getCastString: function () {
+      if (this.movieInfo.casts) {
+        var castStr = ''
+        var i = 0
+        for (;i < this.movieInfo.casts.length - 1; i++) {
+          castStr += this.movieInfo.casts[i].name + '/'
+        }
+        castStr += this.movieInfo.casts[i].name
+        return castStr
+      }
     }
   }
 }
@@ -166,8 +157,11 @@ export default {
     line-height: 12px;
   }
 
+.image-container{
+}
+
 .image {
-    width: 210px;
+    width: 178px;
     height: 250px;
     display: block;
   }
@@ -182,6 +176,15 @@ export default {
     clear: both
 }
 
+.movie-title{
+  height: 28px;
+  width: 150px;
+  margin: 0 0 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .movie-summary{
   width:150px;
 }
@@ -194,6 +197,5 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-family: Microsoft YaHei
 }
 </style>

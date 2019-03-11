@@ -3,7 +3,7 @@
         <el-row>
             <!-- 电影海报 -->
             <el-col :span="6">
-                <img class="poster" v-if="movieInfo.images" :src="getCachedImg">
+                <img class="poster" v-if="movieInfo.image" :src="getCachedImg">
             </el-col>
 
             <!-- 电影名、主演等-->
@@ -39,7 +39,7 @@
           <el-col :span="21" :offset="1">
             <el-tabs type="card" v-model="activeTab">
               <el-tab-pane label="相似电影" name="1">
-                <movie-grid></movie-grid>
+                <movie-grid :movieList="simMovies"></movie-grid>
               </el-tab-pane>
             </el-tabs>
           </el-col>
@@ -64,7 +64,8 @@ export default {
       // 相似电影列表
       similarMovieList: [],
       movieInfo: {},
-      activeTab: '1'
+      activeTab: '1',
+      simMovies: []
     }
   },
 
@@ -72,26 +73,11 @@ export default {
     'movie-grid': MovieGrid
   },
 
-  methods: {
-  },
-
-  watch: {
-    '$route.params' (to, from) {
-      console.log('watch')
-      console.log(this.$route.params)
-    }
-  },
   beforeRouteUpdate (to, from, next) {
-    console.log('update to route ')
-    console.log(to.params)
-    console.log('update from route ')
-    console.log(from.param)
-    console.log('next route ' + next.params)
-    console.log('before route update')
-    console.log(this.$route)
     var movieID = to.params.movieid
+    console.log(movieID)
     axios
-      .get('/api/movie/subject/' + movieID)
+      .get('/api/movie/' + movieID)
       .then((response) => {
         this.movieInfo = response.data
         console.log(response.data)
@@ -100,24 +86,31 @@ export default {
 
   created () {
     var movieID = this.$route.params.movieid
+    console.log(this.movieInfo)
     axios
-      .get('/api/movie/top250')
+      .get('/api/movie/' + movieID)
       .then((response) => {
-        this.similarMovieList = response.data.subjects
-        console.log(this.similarMovieList)
+        this.movieInfo = response.data
+        console.log(response.data)
       })
 
     axios
-      .get('/api/movie/subject/' + movieID)
+      .get('/api/movie/1', {
+        params: {
+          sim: true,
+          start: 0,
+          count: 20
+        }
+      })
       .then((response) => {
-        this.movieInfo = response.data
+        this.simMovies = response.data
         console.log(response.data)
       })
   },
   computed: {
     getCachedImg: function () {
       var newPath = 'https://images.weserv.nl/?url='
-      newPath += this.movieInfo.images.large
+      newPath += this.movieInfo.image
       return newPath
     },
     getDirectorString: function () {

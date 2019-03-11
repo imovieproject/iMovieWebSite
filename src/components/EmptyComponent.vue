@@ -10,7 +10,6 @@
 <script>
 export default {
   created () {
-    console.log('EmptyComponent')
     this.$router.push({
       name: 'MovieDetailPage',
       params: {

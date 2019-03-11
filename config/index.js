@@ -10,9 +10,14 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {
+    proxyTable: { // 用来解决跨域问题
       '/api': {
-          target: 'http://api.douban.com/v2',
+          // 豆瓣api服务器
+          // target: 'http://api.douban.com/v2',
+          
+          // 本地开发api服务器
+          target: 'http://192.168.140.170:5100/api/v1',
+
           changeOrigin: true,
           pathRewrite: {
               '^/api': '/'

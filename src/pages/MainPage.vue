@@ -13,10 +13,11 @@
                 <span slot="label">
                     推荐电影
                     <el-tooltip effect="dark" content="换一批" placement="top-start">
-                        <i class="el-icon-refresh" @click="refreshRecommanded"/>
+                        <i class="el-icon-refresh" @click="getMoreRecommandedMovies"/>
                     </el-tooltip>
                 </span>
-                <movie-grid></movie-grid>
+                <movie-grid v-if="!simMovies.error" v-bind:movieList="simMovies"></movie-grid>
+                <p v-if="simMovies.error">没有更多的推荐电影了</p>
             </el-tab-pane>
         </el-tabs>
 
@@ -25,21 +26,53 @@
 
 <script>
 import MovieGrid from '@/components/MovieGrid'
+import axios from 'axios'
 export default {
   data () {
     return {
       imageSrc: 'http://s15.sinaimg.cn/middle/62791a5cxa647fde862ae&690',
-      activeCard: 'recommandedMovie'
+      activeCard: 'recommandedMovie',
+      simMovies: [],
+      start: 0,
+      count: 20
     }
   },
   components: {
     'movie-grid': MovieGrid
   },
+
+  created () {
+    axios
+      .get('/api/movie/1', {
+        params: {
+          sim: true,
+          start: this.start,
+          count: this.count
+        }
+      })
+      .then(response => {
+        this.simMovies = response.data
+      })
+  },
   methods: {
-    refreshRecommanded: function () {
-      console.log('click refresh')
+    getMoreRecommandedMovies: function () {
+      console.log('refresh')
+      this.start += 20
+      axios
+        .get('/api/movie/1', {
+          params: {
+            sim: true,
+            start: this.start,
+            count: this.count
+          }
+        })
+        .then(response => {
+          this.simMovies = response.data
+          console.log(this.simMovies)
+        })
     }
   }
+
 }
 </script>
 
