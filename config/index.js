@@ -11,6 +11,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: { // 用来解决跨域问题
+      // api服务器
       '/api': {
           // 豆瓣api服务器
           // target: 'http://api.douban.com/v2',
@@ -22,7 +23,16 @@ module.exports = {
           pathRewrite: {
               '^/api': '/'
           }
-      }
+      },
+      // 静态资源服务器
+      '/static': {
+        target: 'http://192.168.140.170:5100/',
+
+        changeOrigin: true,
+        pathRewrite: {
+            '^/static': '/'
+        }
+    }
   },
 
     // Various Dev Server settings

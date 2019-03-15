@@ -4,7 +4,9 @@ import MainPage from '@/pages/MainPage'
 import MovieCard from '@/components/MovieCard'
 import MovieGrid from '@/components/MovieGrid'
 import MovieDetailPage from '@/pages/MovieDetailPage'
+import UserDetailPage from '@/pages/UserDetailPage'
 import EmptyComponent from '@/components/EmptyComponent'
+import LoginPage from '@/pages/LoginPage'
 Vue.use(Router)
 
 export default new Router({
@@ -33,6 +35,16 @@ export default new Router({
       path: '/MovieDetailPage/:movieid',
       name: 'MovieDetailPage',
       component: MovieDetailPage
+    },
+    {
+      path: '/UserDetailPage/:userid',
+      name: 'UserDetailPage',
+      component: UserDetailPage
+    },
+    {
+      path: '/LoginPage',
+      name: 'LoginPage',
+      component: LoginPage
     },
     {
       path: '/EmptyComponent/:movieid',
