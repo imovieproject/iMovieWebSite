@@ -43,7 +43,7 @@ export default {
 
   created () {
     axios
-      .get('/api/movie/1', {
+      .get('/api/movie/1299731', {
         params: {
           sim: true,
           start: this.start,
@@ -59,7 +59,7 @@ export default {
       console.log('refresh')
       this.start += 20
       axios
-        .get('/api/movie/1', {
+        .get('/api/movie/1299731', {
           params: {
             sim: true,
             start: this.start,

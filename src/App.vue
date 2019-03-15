@@ -5,7 +5,7 @@
         <page-header/>
       </el-header>
 
-      <el-main>
+      <el-main >
         <router-view/>
       </el-main>
     </el-container>
@@ -36,5 +36,9 @@ export default {
   border-bottom-style: solid;
   border-bottom-color: rgba(187,187,187,0.5);
   border-bottom-width: 1px;
+}
+.el-main{
+  padding: 60px;
+  padding-top: 20px
 }
 </style>

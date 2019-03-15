@@ -86,7 +86,6 @@ export default {
 
   created () {
     var movieID = this.$route.params.movieid
-    console.log(this.movieInfo)
     axios
       .get('/api/movie/' + movieID)
       .then((response) => {
@@ -95,7 +94,7 @@ export default {
       })
 
     axios
-      .get('/api/movie/1', {
+      .get('/api/movie/' + movieID, {
         params: {
           sim: true,
           start: 0,
