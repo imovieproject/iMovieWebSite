@@ -7,6 +7,7 @@ import MovieDetailPage from '@/pages/MovieDetailPage'
 import UserDetailPage from '@/pages/UserDetailPage'
 import EmptyComponent from '@/components/EmptyComponent'
 import LoginPage from '@/pages/LoginPage'
+import RegisterPage from '@/pages/RegisterPage'
 Vue.use(Router)
 
 export default new Router({
@@ -45,6 +46,11 @@ export default new Router({
       path: '/LoginPage',
       name: 'LoginPage',
       component: LoginPage
+    },
+    {
+      path: '/RegisterPage',
+      name: 'RegisterPage',
+      component: RegisterPage
     },
     {
       path: '/EmptyComponent/:movieid',
