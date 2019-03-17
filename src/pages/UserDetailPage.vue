@@ -9,9 +9,9 @@
 
             <!--用户详情-->
             <el-col :span="8" class="user-detail">
-                <p class="user-name">user name</p>
-                <p class="user-age">user age</p>
-                <p class="user-description">user description</p>
+                <p class="user-name">{{ getLoginUserInfo.name }}</p>
+                <p class="user-age">{{ getLoginUserInfo.age }}</p>
+                <p class="user-description">{{ getLoginUserInfo.description }}</p>
             </el-col>
 
             <!-- 用户标签 -->
@@ -98,6 +98,10 @@ export default {
         len = this.showItemNum
       }
       return this.movieList.slice(0, len)
+    },
+
+    getLoginUserInfo () {
+      return this.$store.getters.getLoginUserInfo
     }
   }
 }

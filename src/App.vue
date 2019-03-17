@@ -1,11 +1,11 @@
 <template>
-  <div id="app">
+  <div id="app" style="height: 100%;width: 100%">
     <el-container>
-      <el-header class="bottom-line">
+      <el-header style="padding: 0">
         <page-header/>
       </el-header>
 
-      <el-main >
+      <el-main>
         <router-view/>
       </el-main>
     </el-container>
@@ -19,6 +19,15 @@ export default {
   name: 'App',
   components: {
     'page-header': PageHeader
+  },
+  mounted () {
+    window.addEventListener('unload', this.saveState)
+  },
+
+  methods: {
+    saveState () {
+      sessionStorage.setItem('state', JSON.stringify(this.$store.state))
+    }
   }
 }
 </script>
@@ -32,11 +41,6 @@ export default {
   color: #2c3e50;
 }
 
-.bottom-line {
-  border-bottom-style: solid;
-  border-bottom-color: rgba(187,187,187,0.5);
-  border-bottom-width: 1px;
-}
 .el-main{
   padding: 60px;
   padding-top: 20px

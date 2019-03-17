@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import axios from 'axois'
+import store from './store'
 library.add(faUserSecret)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
@@ -21,6 +22,7 @@ Vue.prototype.HOST = '/api'
 new Vue({
   el: '#app',
   router,
+  store,
   components: { App },
   template: '<App/>'
 })

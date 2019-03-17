@@ -1,9 +1,11 @@
 <template>
-    <div class="container">
+    <div
+      class="container"
+    >
         <el-row type="flex" justify="fspace-between">
             <!-- 网站图标 -->
             <el-col :span="12" >
-                <div class="page-logo">
+                <div class="page-logo" @click="pageLogoClicked">
                     <span style="color: #67C23A;font-size: 72px">i<span style="color: #409EFF">Movie</span></span>
                     <span style="color: #909399;font-size: 14px">一个精准的电影推荐网站</span>
                 </div>
@@ -30,7 +32,7 @@
                     <!-- 登录按钮 -->
                     <div class="button-container">
                         <el-button type="danger" plain @click="cancelBtnClicked">取消</el-button>
-                        <el-button type="primary" plain @click="loginBtnClicked" >登录</el-button>
+                        <el-button type="primary" plain @click="loginBtnClicked" :loading="isLogining">{{ loginButtonText }}</el-button>
                     </div>
 
                 </el-card>
@@ -47,11 +49,18 @@ export default {
     return {
       username: '',
       password: '',
-      inputType: 'password'
+      inputType: 'password',
+      isLogining: false,
+      loginButtonText: '登录'
     }
   },
 
   methods: {
+    pageLogoClicked () {
+      this.$router.push({
+        name: 'LoginPage'
+      })
+    },
     cancelBtnClicked () {
       console.log('cancel')
     },
@@ -75,6 +84,8 @@ export default {
           confirmButtonText: '确定'
         })
       } else {
+        this.isLogining = true
+        this.loginButtonText = '登录中'
         var formData = new FormData()
         formData.append('username', this.username)
         formData.append('password', this.password)
@@ -87,6 +98,8 @@ export default {
           }
         })
           .then(response => {
+            this.isLogining = false
+            this.loginButtonText = '登录'
             console.log(response)
             if (response.data.status === 'error') {
               msgBoxTitle = '登录错误'
@@ -106,6 +119,8 @@ export default {
                 }
               })
             } else {
+              this.$store.commit('setIsLogin', true)
+              this.$store.commit('setLoginUserInfo', response.data.userInfo)
               msgBoxContent = '登录成功'
               this.$message({
                 message: msgBoxContent,
@@ -117,6 +132,23 @@ export default {
                     name: 'MainPage'
                   })
                 }
+              })
+            }
+          })
+          .catch(error => {
+            this.isLogining = false
+            this.loginButtonText = '登录'
+            if (error.response) { // 能够正常与服务器进行通信，但是服务器的响应中显示错误
+              this.$alert(error.response.status, '网络错误', {
+                confirmButtonText: '确定'
+              })
+            } else if (error.request) { // 能够发送请求，但是服务器无响应
+              this.$alert('服务器无响应', '网络错误', {
+                confirmButtonText: '确定'
+              })
+            } else { // 无法发送请求
+              this.$alert('无法发送请求', '网络错误', {
+                confirmButtonText: '确定'
               })
             }
           })
